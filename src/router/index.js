@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../components/Login.vue'
-import DashboardLayout from '../layouts/DashboardLayout.vue'
-import TravelMap from '../views/TravelMap.vue'
-import CourseManagement from '../views/CourseManagement.vue'
-import MediaResource from '../views/MediaResource.vue'
-import Manager from '../views/Manager.vue'
+import Login from '../views/login/Login.vue'
+import BasicLayout from '../layouts/BasicLayout.vue'
+import Welcome from '../views/dashboard/Welcome.vue'
+import CourseManagement from '../views/course/CourseManagement.vue'
+import TravelMap from '../views/travel/TravelMap.vue'
+import MediaResource from '../views/media/MediaResource.vue'
+
 const routes = [
   {
     path: '/login',
@@ -12,13 +13,13 @@ const routes = [
   },
   {
     path: '/',
-    component: DashboardLayout,
+    component: BasicLayout,
     children: [
-      { path: '', redirect: 'travel-map' },
-      { path: 'travel-map', name: 'TravelMap', component: TravelMap },
+      { path: '', redirect: 'dashboard' },
+      { path: 'dashboard', name: 'Dashboard', component: Welcome },
       { path: 'course-management', name: 'CourseManagement', component: CourseManagement },
-      { path: 'media-resource', name: 'MediaResource', component: MediaResource },
-      { path: 'manager', name: 'Manager', component: Manager },
+      { path: 'travel-map', name: 'TravelMap', component: TravelMap },
+      { path: 'media-resource', name: 'MediaResource', component: MediaResource }
     ]
   }
 ]
@@ -28,10 +29,10 @@ const router = createRouter({
   routes
 })
 
-// 路由守卫：未登录状态下除登录页外一律跳转到 /login
+// 路由守卫：如果未登录则跳转到登录界面
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('auth') === 'true'
-  if (to.path !== '/login' && !isAuthenticated) {
+  const isAuth = localStorage.getItem('auth') === 'true'
+  if (to.path !== '/login' && !isAuth) {
     next('/login')
   } else {
     next()

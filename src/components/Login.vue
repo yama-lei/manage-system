@@ -16,9 +16,10 @@
 </template>
 
 <script setup>
-import axios from 'axios'
+import request from '@/utils/request'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 
 const username = ref('')
@@ -28,14 +29,14 @@ const handleLogin = () => {
   // 如果输入的是默认凭据，则直接通过默认验证（无需接口调用）
   if(username.value.trim() === 'admin' && password.value === 'password'){
     localStorage.setItem('auth', 'true')
-    // 可选：保存默认 token 或其它信息，例如 localStorage.setItem('token', 'default-token')
+    localStorage.setItem('token', 'default-token')
     router.push('/')
     username.value = ''
     password.value = ''
     return
   }
 
-  axios.post("http://127.0.0.1:4523/m1/5812904-5497981-default/api/v1/admin/login", {
+  request.post("/api/v1/admin/login", {
     name: username.value,
     password: password.value
   })
@@ -56,6 +57,14 @@ const handleLogin = () => {
     alert("登录请求失败")
   })
 }
+
+request.get('/api/v1/admin/courses')
+  .then(res => {
+    // ...
+  })
+  .catch(error => {
+    console.error("获取课程列表失败", error)
+  })
 </script>
 
 <style scoped>
