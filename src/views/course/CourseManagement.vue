@@ -26,13 +26,13 @@
           <td>{{ course.characters.join(', ') }}</td>
           <td>{{ course.createTime }}</td>
           <td>
-            <div v-for="video in course.videos" :key="video.name">
-              <a :href="video.url" target="_blank">{{ video.name }}</a>
+            <div v-for="vid in course.videoId" :key="vid">
+              {{ vid }}
             </div>
           </td>
           <td>
-            <div v-for="photo in course.photos" :key="photo.name">
-              <a :href="photo.url" target="_blank">{{ photo.name }}</a>
+            <div v-for="pid in course.photoId" :key="pid">
+              {{ pid }}
             </div>
           </td>
           <td>{{ course.visits }}</td>
@@ -48,30 +48,26 @@
     <div v-if="showAddCourse" class="dialog">
       <h3>添加课程</h3>
       <div class="dialog-content">
-        <label for="add-course-code">课程编号:</label>
-        <input type="text" id="add-course-code" v-model="newCourse.code" placeholder="请输入课程编号" />
+        <label for="edit-course-code">课程编号:</label>
+        <input type="text" id="edit-course-code" v-model="newCourse.code" placeholder="请输入课程编号" />
 
-        <label for="add-course-title">标题:</label>
-        <input type="text" id="add-course-title" v-model="newCourse.title" placeholder="请输入课程标题" />
+        <label for="edit-course-characters">人物 (多个用逗号分隔):</label>
+        <input type="text" id="edit-course-characters" v-model="newCourse.characters" placeholder="例如：程开甲" />
 
-        <label for="add-course-introduction">介绍:</label>
-        <textarea id="add-course-introduction" v-model="newCourse.introduction" placeholder="请输入课程介绍"></textarea>
+        <label for="edit-course-title">标题:</label>
+        <input type="text" id="edit-course-title" v-model="newCourse.title" placeholder="请输入课程标题" />
 
-        <label for="add-course-characters">人物 (多个用逗号分隔):</label>
-        <input type="text" id="add-course-characters" v-model="newCourse.characters" placeholder="例如：张三, 李四" />
+        <label for="edit-course-introduction">介绍:</label>
+        <textarea id="edit-course-introduction" v-model="newCourse.introduction" placeholder="请输入课程介绍"></textarea>
 
-        <label for="add-course-createTime">创建时间:</label>
-        <input type="datetime-local" id="add-course-createTime" v-model="newCourse.createTime" />
+        <label for="edit-course-expireTime">过期时间（expireTime）:</label>
+        <input type="datetime-local" id="edit-course-expireTime" v-model="newCourse.expireTime" />
 
-        <label for="add-course-videos">视频 (格式：名称|链接, 多个用逗号分隔):</label>
-        <input type="text" id="add-course-videos" v-model="newCourse.videos" placeholder="例如：视频1|http://...,视频2|http://..." />
+        <label for="edit-course-videos">视频id (整数):</label>
+        <input type="text" id="edit-course-videos" v-model="newCourse.videos" />
 
-        <label for="add-course-photos">照片 (格式：名称|链接, 多个用逗号分隔):</label>
-        <input type="text" id="add-course-photos" v-model="newCourse.photos" placeholder="例如：照片1|http://...,照片2|http://..." />
-
-        <label for="add-course-visits">访问量:</label>
-        <input type="number" id="add-course-visits" v-model.number="newCourse.visits" placeholder="请输入访问量" />
-      </div>
+        <label for="edit-course-photos">照片id (整数):</label>
+        <input type="text" id="edit-course-photos" v-model="newCourse.photos" /> </div>
       <div class="dialog-actions">
         <button @click="submitNewCourse">提交</button>
         <button @click="closeAddModal">取消</button>
@@ -85,26 +81,23 @@
         <label for="edit-course-code">课程编号:</label>
         <input type="text" id="edit-course-code" v-model="editCourseData.code" placeholder="请输入课程编号" />
 
+        <label for="edit-course-characters">人物 (多个用逗号分隔):</label>
+        <input type="text" id="edit-course-characters" v-model="editCourseData.characters" placeholder="例如：程开甲" />
+
         <label for="edit-course-title">标题:</label>
         <input type="text" id="edit-course-title" v-model="editCourseData.title" placeholder="请输入课程标题" />
 
         <label for="edit-course-introduction">介绍:</label>
         <textarea id="edit-course-introduction" v-model="editCourseData.introduction" placeholder="请输入课程介绍"></textarea>
 
-        <label for="edit-course-characters">人物 (多个用逗号分隔):</label>
-        <input type="text" id="edit-course-characters" v-model="editCourseData.characters" placeholder="例如：张三, 李四" />
+        <label for="edit-course-expireTime">过期时间（expireTime）:</label>
+        <input type="datetime-local" id="edit-course-expireTime" v-model="editCourseData.expireTime" />
 
-        <label for="edit-course-createTime">创建时间:</label>
-        <input type="datetime-local" id="edit-course-createTime" v-model="editCourseData.createTime" />
+        <label for="edit-course-videos">视频id (整数):</label>
+        <input type="text" id="edit-course-videos" v-model="editCourseData.videos" />
 
-        <label for="edit-course-videos">视频 (格式：名称|链接, 多个用逗号分隔):</label>
-        <input type="text" id="edit-course-videos" v-model="editCourseData.videos" placeholder="例如：视频1|http://...,视频2|http://..." />
-
-        <label for="edit-course-photos">照片 (格式：名称|链接, 多个用逗号分隔):</label>
-        <input type="text" id="edit-course-photos" v-model="editCourseData.photos" placeholder="例如：照片1|http://...,照片2|http://..." />
-
-        <label for="edit-course-visits">访问量:</label>
-        <input type="number" id="edit-course-visits" v-model.number="editCourseData.visits" placeholder="请输入访问量" />
+        <label for="edit-course-photos">照片id (整数):</label>
+        <input type="text" id="edit-course-photos" v-model="editCourseData.photos" />
       </div>
       <div class="dialog-actions">
         <button @click="submitEditCourse">提交</button>
@@ -130,6 +123,13 @@
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 
+// 辅助方法：将 datetime-local 的值转换为 "YYYY-MM-DD HH:MM:SS" 格式
+function formatExpireTime(dateTimeStr) {
+  if (!dateTimeStr) return ''
+  const dt = dateTimeStr.replace('T', ' ')
+  return dt.length === 16 ? dt + ":00" : dt
+}
+
 // 课程列表数据
 const courseList = ref([])
 
@@ -154,13 +154,13 @@ onMounted(() => {
 const showAddCourse = ref(false)
 const newCourse = ref({
   code: '',
+  characters: '',  // 用户输入的逗号分隔字符串
   title: '',
   introduction: '',
-  characters: '',
-  createTime: '',
-  videos: '',
-  photos: '',
-  visits: 0
+  videos: '',      // 输入视频id字符串，例如 "1,2,3"
+  photos: '',      // 输入照片id字符串，例如 "4,5,6"
+  expireTime: '',
+  available: true
 })
 
 function openAddModal() {
@@ -175,59 +175,53 @@ function closeAddModal() {
 function resetNewCourse() {
   newCourse.value = {
     code: '',
+    characters: '',
     title: '',
     introduction: '',
-    characters: '',
-    createTime: '',
     videos: '',
     photos: '',
-    visits: 0
+    expireTime: '',
+    available: true
   }
 }
 
 function submitNewCourse() {
-  // 预处理：将字符串转换为数组对象
+  // 将人物字符串转换为数组
   const charactersArray = newCourse.value.characters
     .split(',')
     .map(item => item.trim())
     .filter(item => item)
 
-  const videosArray = newCourse.value.videos.split(',')
-    .map(item => {
-      const parts = item.split('|')
-      if (parts.length === 2) {
-        return { name: parts[0].trim(), url: parts[1].trim() }
-      }
-      return null
-    })
-    .filter(item => item)
+  // 将视频输入转换为整型数组
+  const videoIdArray = newCourse.value.videos.split(',')
+    .map(item => parseInt(item.trim()))
+    .filter(item => !isNaN(item))
 
-  const photosArray = newCourse.value.photos.split(',')
-    .map(item => {
-      const parts = item.split('|')
-      if (parts.length === 2) {
-        return { name: parts[0].trim(), url: parts[1].trim() }
-      }
-      return null
-    })
-    .filter(item => item)
+  // 将照片输入转换为整型数组
+  const photoIdArray = newCourse.value.photos.split(',')
+    .map(item => parseInt(item.trim()))
+    .filter(item => !isNaN(item))
 
-  // 构造提交数据
+  // 格式化 expireTime 为 "YYYY-MM-DD HH:MM:SS"
+  const formattedExpireTime = formatExpireTime(newCourse.value.expireTime)
+
+  // 构造提交数据，符合后端接口的要求
   const courseData = {
     code: newCourse.value.code,
+    characters: charactersArray,
     title: newCourse.value.title,
     introduction: newCourse.value.introduction,
-    characters: charactersArray,
-    createTime: newCourse.value.createTime,
-    videos: videosArray,
-    photos: photosArray,
-    visits: newCourse.value.visits
+    photoId: photoIdArray,
+    videoId: videoIdArray,
+    questionId: [],  // 默认空数组
+    expireTime: formattedExpireTime,
+    available: newCourse.value.available
   }
-
-  // 调用后端接口提交数据（接口地址为示例）
-  axios.post('https://api.yunshangmalan.online/api/v1/admin/courses/add', courseData)
+  console.log(courseData)
+  axios.post('https://api.yunshangmalan.online/api/v1/courses/add', courseData, {
+    headers: { 'Content-Type': 'application/json' }
+  })
     .then(res => {
-      // 提交成功后重新加载课程列表
       loadCourses()
       closeAddModal()
     })
@@ -245,23 +239,21 @@ const editCourseData = ref({
   title: '',
   introduction: '',
   characters: '',
-  createTime: '',
+  expireTime: '',
   videos: '',
-  photos: '',
-  visits: 0
+  photos: ''
 })
 
 function openEditModal(course) {
-  // 将数组转换为字符串以便展示在表单中
+  // 假设后端返回的课程数据中 videoId、photoId 均为整型数组
   editCourseData.value = {
     code: course.code,
     title: course.title,
     introduction: course.introduction,
     characters: course.characters.join(', '),
-    createTime: course.createTime,
-    videos: course.videos.map(v => `${v.name}|${v.url}`).join(', '),
-    photos: course.photos.map(p => `${p.name}|${p.url}`).join(', '),
-    visits: course.visits
+    expireTime: course.expireTime,  // 应该为 "YYYY-MM-DD HH:MM:SS" 格式
+    videos: course.videoId ? course.videoId.join(', ') : '',
+    photos: course.photoId ? course.photoId.join(', ') : ''
   }
   showEditCourse.value = true
 }
@@ -271,45 +263,36 @@ function closeEditModal() {
 }
 
 function submitEditCourse() {
-  // 同样预处理字符串字段
   const charactersArray = editCourseData.value.characters
     .split(',')
     .map(item => item.trim())
     .filter(item => item)
 
-  const videosArray = editCourseData.value.videos.split(',')
-    .map(item => {
-      const parts = item.split('|')
-      if (parts.length === 2) {
-        return { name: parts[0].trim(), url: parts[1].trim() }
-      }
-      return null
-    })
-    .filter(item => item)
+  const videoIdArray = editCourseData.value.videos.split(',')
+    .map(item => parseInt(item.trim()))
+    .filter(item => !isNaN(item))
 
-  const photosArray = editCourseData.value.photos.split(',')
-    .map(item => {
-      const parts = item.split('|')
-      if (parts.length === 2) {
-        return { name: parts[0].trim(), url: parts[1].trim() }
-      }
-      return null
-    })
-    .filter(item => item)
+  const photoIdArray = editCourseData.value.photos.split(',')
+    .map(item => parseInt(item.trim()))
+    .filter(item => !isNaN(item))
+
+  const formattedExpireTime = formatExpireTime(editCourseData.value.expireTime)
 
   const updatedCourse = {
     code: editCourseData.value.code,
+    characters: charactersArray,
     title: editCourseData.value.title,
     introduction: editCourseData.value.introduction,
-    characters: charactersArray,
-    createTime: editCourseData.value.createTime,
-    videos: videosArray,
-    photos: photosArray,
-    visits: editCourseData.value.visits
+    photoId: photoIdArray,
+    videoId: videoIdArray,
+    questionId: [],
+    expireTime: formattedExpireTime,
+    available: true
   }
 
-  // 调用后端接口更新数据（接口地址为示例）
-  axios.put('https://api.yunshangmalan.online/api/v1/admin/courses/edit', updatedCourse)
+  axios.put('https://api.yunshangmalan.online/api/v1/admin/courses/edit', updatedCourse, {
+    headers: { 'Content-Type': 'application/json' }
+  })
     .then(res => {
       loadCourses()
       closeEditModal()
@@ -326,7 +309,6 @@ const showDeleteCourse = ref(false)
 const deleteCourseData = ref({})
 
 function openDeleteModal(course) {
-  // 仅保存需要删除课程的关键信息，这里以 code 和 title 为例
   deleteCourseData.value = {
     code: course.code,
     title: course.title
@@ -339,9 +321,9 @@ function closeDeleteModal() {
 }
 
 function submitDeleteCourse() {
-  // 调用后端接口删除数据（接口地址为示例，假设传递 code 作为参数）
   axios.delete('https://api.yunshangmalan.online/api/v1/admin/courses/delete', {
-    data: { code: deleteCourseData.value.code }
+    data: { code: deleteCourseData.value.code },
+    headers: { 'Content-Type': 'application/json' }
   })
     .then(res => {
       loadCourses()
